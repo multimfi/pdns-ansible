@@ -46,6 +46,7 @@
       - priv_host
       - skip_missing: yes
   when: "pdns_mysql_databases_credentials | length > 0"
+  run_once: True
 
 - name: Check if the MySQL databases are empty
   command: >
@@ -56,6 +57,7 @@
   with_dict: "{{ pdns_backends }}"
   register: _pdns_check_mysql_db
   changed_when: False
+  run_once: True
 
 - block:
 
@@ -103,3 +105,4 @@
     target: "{{ _pdns_mysql_schema_file }}"
   when: "item['item']['key'].split(':')[0] == 'gmysql' and item['stdout'] == '0'"
   with_items: "{{ _pdns_check_mysql_db['results'] }}"
+  run_once: True
